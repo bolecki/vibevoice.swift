@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "VibeVoice",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v14), .iOS(.v16)],
     products: [
         .library(name: "VibeVoice", targets: ["VibeVoice"]),
         .executable(name: "vibevoiceCLI", targets: ["VibeVoiceCLI"])
