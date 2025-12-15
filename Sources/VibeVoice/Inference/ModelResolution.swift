@@ -150,8 +150,19 @@ public struct ModelResolution {
             return URL(fileURLWithPath: hfHome).appendingPathComponent("hub")
         }
 
+        #if os(iOS) || os(tvOS) || os(watchOS)
+        // On iOS and related platforms, use the app's cache directory
+        if let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            return cacheDir.appendingPathComponent("huggingface/hub")
+        }
+        // Fallback to NSHomeDirectory if cache directory is not available
+        let homeDir = URL(fileURLWithPath: NSHomeDirectory())
+        return homeDir.appendingPathComponent(".cache/huggingface/hub")
+        #else
+        // On macOS, use the user's home directory
         let homeDir = FileManager.default.homeDirectoryForCurrentUser
         return homeDir.appendingPathComponent(".cache/huggingface/hub")
+        #endif
     }
 
     public static func findCachedModel(modelId: String, requireWeights: Bool = true) -> URL? {
